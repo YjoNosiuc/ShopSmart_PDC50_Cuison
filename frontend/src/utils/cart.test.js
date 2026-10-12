@@ -27,4 +27,42 @@ describe('cart utilities', () => {
     expect(calculateCartItemCount([{ quantity: 2 }, { quantity: 3 }])).toBe(5);
     expect(calculateCartItemCount([])).toBe(0);
   });
+
+  it('increases only the selected item by one', () => {
+    const cart = [
+      { productId: 1, name: 'Mouse', price: 500, stock: 5, quantity: 1 },
+      { productId: 2, name: 'Lamp', price: 900, stock: 5, quantity: 3 }
+    ];
+    const result = updateCartQuantity(cart, 1, 2);
+    expect(result.error).toBe('');
+    expect(result.cart[0].quantity).toBe(2);
+    expect(result.cart[1].quantity).toBe(3);
+  });
+
+  it('decreases a quantity of 2 to 1', () => {
+    const cart = [{ productId: 1, name: 'Mouse', price: 500, stock: 5, quantity: 2 }];
+    const result = updateCartQuantity(cart, 1, 1);
+    expect(result.error).toBe('');
+    expect(result.cart[0].quantity).toBe(1);
+  });
+
+  it('rejects a quantity of 0 and leaves the cart unchanged', () => {
+    const cart = [{ productId: 1, name: 'Mouse', price: 500, stock: 5, quantity: 2 }];
+    const result = updateCartQuantity(cart, 1, 0);
+    expect(result.error).not.toBe('');
+    expect(result.cart).toBe(cart);
+    expect(result.cart[0].quantity).toBe(2);
+  });
+
+  it('allows a quantity equal to stock and rejects one above stock', () => {
+    const cart = [{ productId: 1, name: 'Mouse', price: 500, stock: 2, quantity: 1 }];
+    const atStock = updateCartQuantity(cart, 1, cart[0].stock);
+    expect(atStock.error).toBe('');
+    expect(atStock.cart[0].quantity).toBe(2);
+
+    const overStock = updateCartQuantity(cart, 1, cart[0].stock + 1);
+    expect(overStock.error).toContain('Only');
+    expect(overStock.cart).toBe(cart);
+    expect(overStock.cart[0].quantity).toBe(1);
+  });
 });
