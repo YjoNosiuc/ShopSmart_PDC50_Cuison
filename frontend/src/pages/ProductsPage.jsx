@@ -3,11 +3,13 @@ import ProductCard from '../components/ProductCard.jsx';
 import StatusMessage from '../components/StatusMessage.jsx';
 import { useCart } from '../context/CartContext.jsx';
 import { api } from '../services/api.js';
+import { sortProducts } from '../utils/products.js';
 
 export default function ProductsPage() {
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('All');
+  const [sortOrder, setSortOrder] = useState('default');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const { addToCart, cartMessage } = useCart();
@@ -28,13 +30,15 @@ export default function ProductsPage() {
 
   const query = search.trim().toLowerCase();
 
-  const visibleProducts = products.filter((product) => {
+  const filtered = products.filter((product) => {
     const matchesSearch =
       product.name.toLowerCase().includes(query) ||
       product.description.toLowerCase().includes(query);
     const matchesCategory = category === 'All' || product.category === category;
     return matchesSearch && matchesCategory;
   });
+
+  const visibleProducts = sortProducts(filtered, sortOrder);
 
   return (
     <section>
@@ -55,6 +59,15 @@ export default function ProductsPage() {
           <span>Category</span>
           <select value={category} onChange={(event) => setCategory(event.target.value)}>
             {categories.map((item) => <option key={item}>{item}</option>)}
+          </select>
+        </label>
+        <label>
+          <span>Sort by</span>
+          <select value={sortOrder} onChange={(event) => setSortOrder(event.target.value)}>
+            <option value="default">Default</option>
+            <option value="price-asc">Price: low to high</option>
+            <option value="price-desc">Price: high to low</option>
+            <option value="name-asc">Name: A to Z</option>
           </select>
         </label>
       </div>
