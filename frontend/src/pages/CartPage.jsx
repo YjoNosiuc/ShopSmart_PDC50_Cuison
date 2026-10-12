@@ -17,8 +17,8 @@ export default function CartPage() {
             {cart.map((item) => (
               <article className="cart-item" key={item.productId}>
                 <div><h2>{item.name}</h2><p>₱{item.price.toLocaleString('en-PH')} each</p></div>
-                <label>
-                  Quantity
+                <div className="quantity-field">
+                  <span>Quantity</span>
                   <div className="quantity-control">
                     <button
                       type="button"
@@ -46,7 +46,7 @@ export default function CartPage() {
                     </button>
                   </div>
                   {item.quantity >= item.stock && <small className="stock-note">Max {item.stock} in stock</small>}
-                </label>
+                </div>
                 <strong>₱{(item.price * item.quantity).toLocaleString('en-PH')}</strong>
                 <button className="danger" onClick={() => removeFromCart(item.productId)}>Remove</button>
               </article>

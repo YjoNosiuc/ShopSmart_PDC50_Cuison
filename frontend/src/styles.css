@@ -43,6 +43,7 @@ input:focus, select:focus, textarea:focus { outline: 3px solid #99f6e4; border-c
 .cart-item { display: grid; grid-template-columns: 1.8fr .8fr .8fr auto; gap: 1rem; align-items: center; background: white; border: 1px solid #dce3eb; border-radius: .8rem; padding: 1rem; }
 .cart-item h2 { font-size: 1rem; margin: 0; }
 .cart-item p { margin: .3rem 0 0; color: #58677a; }
+.quantity-field { display: grid; gap: .4rem; font-weight: 700; }
 .quantity-control { display: flex; align-items: center; gap: .4rem; }
 .quantity-control button { padding: .45rem .8rem; min-width: 2.4rem; }
 .quantity-control input { width: 4.5rem; text-align: center; }
