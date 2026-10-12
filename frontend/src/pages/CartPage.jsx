@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import StatusMessage from '../components/StatusMessage.jsx';
 import { useCart } from '../context/CartContext.jsx';
+import { calculateItemSubtotal } from '../utils/cart.js';
 
 export default function CartPage() {
   const { cart, total, itemCount, cartMessage, setQuantity, removeFromCart } = useCart();
@@ -47,7 +48,7 @@ export default function CartPage() {
                   </div>
                   {item.quantity >= item.stock && <small className="stock-note">Max {item.stock} in stock</small>}
                 </div>
-                <strong>₱{(item.price * item.quantity).toLocaleString('en-PH')}</strong>
+                <strong>₱{calculateItemSubtotal(item).toLocaleString('en-PH')}</strong>
                 <button className="danger" onClick={() => removeFromCart(item.productId)}>Remove</button>
               </article>
             ))}
